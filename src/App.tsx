@@ -1,251 +1,492 @@
-import { useEffect, useState } from 'react';
-import type { ReactNode } from 'react';
+import { useState, useEffect } from 'react';
 import AccessibilityMenu from './components/AccessibilityMenu';
-import certificadoImg from './assets/CertificadoSerratec.png';
+import Section from './components/Section';
+import { useScrollSpy } from './hooks/useScrollSpy';
+import { PROJECTS } from './data/projects';
+import { CERTIFICATES, type Certificate } from './data/certificates';
 import perfilImg from './assets/Eu.jpeg';
 
-const PROJECTS = [
-  {
-    title: "Sistema de Processamento Assíncrono",
-    desc: "Desenvolvimento de sistema backend utilizando arquitetura DDD em 5 camadas, persistência otimizada com Dapper e comunicação assíncrona com RabbitMQ.",
-    tags: ["C# .NET", "DDD", "RabbitMQ", "Dapper"],
-    links: [
-      { label: "Backend", url: "https://github.com/MiguelStael/Backend-DesafioTecnicoBackend-Gerenciamento-de-Assinaturas." },
-      { label: "Frontend", url: "https://github.com/MiguelStael/-Frontend-DesafioTecnicoFrontend-Gerencimento-de-Assinaturas." }
-    ],
-    col: "col-8",
-    icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
-  },
-  {
-    title: "Biomob - Segurança Digital",
-    desc: "Desenvolvimento de API Java/Spring Boot integrada a aplicações Web e Mobile para prevenção de vulnerabilidades e validação de acessos.",
-    tags: ["Java", "Spring Boot", "API RESTful"],
-    links: [],
-    col: "col-4",
-    icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-  },
-  {
-    title: "React Native App",
-    desc: "Aplicativo mobile focado em experiência do usuário e integração fluida de dados.",
-    tags: ["React Native", "TypeScript"],
-    links: [{ label: "GitHub", url: "https://github.com/MiguelStael/TrabalhoIndividual-ReactNative" }],
-    col: "col-4",
-    icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-  }
-];
-
-function Section({ id, label, title, children, className = "" }: { id: string, label: string, title: string, children: ReactNode, className?: string }) {
-  return (
-    <section id={id} className={`section-padding ${className}`}>
-      <div className="container">
-        <div className="section-header reveal">
-          <span className="section-label">{label}</span>
-          <h2 className="section-title">{title}</h2>
-        </div>
-        {children}
-      </div>
-    </section>
-  );
-}
+type CategoryFilter = 'Todos' | Certificate['category'];
 
 function App() {
-  const [scrolled, setScrolled] = useState(false);
+  const scrolled = useScrollSpy(40);
+  const [activeCategory, setActiveCategory] = useState<CategoryFilter>('Todos');
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('is-visible');
-      });
-    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, []);
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  return (
-    <div className="app-container">
-      <div className="aurora-bg">
-        <div className="aurora-blob blob-1" />
-        <div className="aurora-blob blob-2" />
-        <div className="aurora-blob blob-3" />
-      </div>
+  const categories: CategoryFilter[] = [
+    'Todos',
+    'Tecnologia & IA',
+    'Dados & BI',
+    'Liderança & Negócios',
+    'Soft Skills',
+  ];
 
-      <nav className={`nav-fixed ${scrolled ? 'nav-scrolled' : ''}`}>
-        <div className="container nav-content">
-          <div className="logo" onClick={() => scrollTo('home')}>
-            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="logo-svg">
-              <path d="M6 18V8L12 15L18 8V18" stroke="url(#g1)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M26 18L32 8L38 18 M28 15H36" stroke="url(#g1)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M8 36H14C17 36 17 32 14 32H10C7 32 7 28 10 28H16" stroke="url(#g2)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M26 28L32 36L38 28" stroke="url(#g2)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <defs>
-                <linearGradient id="g1" x1="6" y1="8" x2="38" y2="18" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="var(--accent-primary)"/><stop offset="1" stopColor="var(--accent-secondary)"/>
-                </linearGradient>
-                <linearGradient id="g2" x1="8" y1="28" x2="38" y2="36" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="var(--accent-secondary)"/><stop offset="1" stopColor="var(--accent-tertiary)"/>
-                </linearGradient>
-              </defs>
-            </svg>
-            <span>MiguelStael.dev</span>
-          </div>
-          <div className="nav-links">
-            {['projetos', 'sobre', 'certificados', 'contato'].map(item => (
-              <span key={item} onClick={() => scrollTo(item)} className="nav-link">
-                {item.charAt(0).toUpperCase() + item.slice(1)}
-              </span>
-            ))}
-            <a href="./curriculo.pdf" download className="btn-aura btn-outline" style={{ padding: '6px 16px', fontSize: '0.75rem', marginLeft: '1rem' }}>
+  const filteredCertificates = activeCategory === 'Todos'
+    ? CERTIFICATES
+    : CERTIFICATES.filter((cert) => cert.category === activeCategory);
+
+  return (
+    <div className="app-wrapper">
+      <header className={`header-nav ${scrolled ? 'nav-scrolled' : ''}`}>
+        <div className="container header-content">
+          <a href="#home" onClick={(e) => { e.preventDefault(); scrollTo('home'); }} className="brand">
+            <span className="brand-dot" />
+            <span>Miguel Stael</span>
+          </a>
+
+          <nav className="nav-menu">
+            <a href="#projetos" onClick={(e) => { e.preventDefault(); scrollTo('projetos'); }} className="nav-item">
+              Projetos
+            </a>
+            <a href="#sobre" onClick={(e) => { e.preventDefault(); scrollTo('sobre'); }} className="nav-item">
+              Sobre
+            </a>
+            <a href="#certificados" onClick={(e) => { e.preventDefault(); scrollTo('certificados'); }} className="nav-item">
+              Formação &amp; Certificados
+            </a>
+            <a href="#contato" onClick={(e) => { e.preventDefault(); scrollTo('contato'); }} className="nav-item">
+              Contato
+            </a>
+            <a
+              href="/Miguel_Stael_CV.pdf"
+              download
+              className="btn btn-outline"
+              style={{ padding: '6px 14px', fontSize: '0.8rem' }}
+            >
               Baixar CV
             </a>
-          </div>
+          </nav>
         </div>
-      </nav>
+      </header>
 
       <main>
-        <section id="home" className="hero-section">
-          <div className="container hero-content reveal">
+        {/* HERO SECTION */}
+        <section id="home" className="hero">
+          <div className="container hero-grid reveal">
             <div>
-              <span className="hero-badge">Aberto a novas oportunidades</span>
-              <h1 className="hero-title">Desenvolvedor <span style={{ color: 'var(--accent-primary)' }}>Júnior</span> Full Stack</h1>
-              <p className="hero-subtitle">
-                Olá, eu sou o Miguel! Gosto de resolver problemas, aprender novas tecnologias e construir aplicações práticas do backend ao frontend.
+              <div className="status-tag">
+                <span className="status-dot" />
+                <span>Disponível para novos projetos</span>
+              </div>
+              <h1 className="hero-title">
+                Desenvolvedor <span>Backend &amp; Full Stack</span>
+              </h1>
+              <p className="hero-text">
+                Atuação em C# (.NET Core) e Java (Spring Boot), com experiência em microsserviços, mensageria com RabbitMQ, arquitetura DDD e persistência com Dapper em SQL Server, PostgreSQL e MySQL. No frontend e mobile, desenvolvo com React, TypeScript e React Native.
               </p>
-              <div className="hero-actions">
-                <button onClick={() => scrollTo('contato')} className="btn-aura btn-primary">
+              <div className="hero-meta">
+                <span>📍 Cordeiro - RJ</span>
+                <span>📞 (22) 98136-2226</span>
+              </div>
+              <div className="hero-ctas">
+                <button onClick={() => scrollTo('contato')} className="btn btn-accent">
                   Entrar em contato
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
                 </button>
-                <button onClick={() => scrollTo('projetos')} className="btn-aura btn-outline">Ver projetos</button>
+                <button onClick={() => scrollTo('projetos')} className="btn btn-outline">
+                  Ver projetos
+                </button>
+                <button onClick={() => scrollTo('certificados')} className="btn btn-outline">
+                  Ver certificados ({CERTIFICATES.length})
+                </button>
               </div>
             </div>
-            <div className="profile-wrapper">
-              <div className="profile-glow" />
-              <img src={perfilImg} alt="Miguel Stael" className="profile-img" />
+
+            <div className="photo-frame">
+              <div className="photo-backdrop" />
+              <img src={perfilImg} alt="Miguel Stael" className="photo-img" />
             </div>
           </div>
         </section>
 
-        <Section id="projetos" label="Portfólio" title="Projetos em Destaque">
-          <div className="bento-grid">
-            {PROJECTS.map((project, i) => (
-              <article key={i} className={`glass-card ${project.col} reveal`}>
-                <div className="project-icon">{project.icon}</div>
-                <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>{project.title}</h3>
-                <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem', fontSize: '0.95rem' }}>{project.desc}</p>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 'auto' }}>
-                  <div className="tag-container">
-                    {project.tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
-                  </div>
-                  <div style={{ display: 'flex', gap: '1rem' }}>
-                    {project.links.map(link => (
-                      <a key={link.label} href={link.url} target="_blank" rel="noreferrer" className="nav-link" style={{ fontSize: '0.8rem' }}>
+        {/* PROJECTS SECTION */}
+        <Section id="projetos" num="01" label="Portfólio" title="Projetos em Destaque">
+          <div className="projects-grid">
+            {PROJECTS.map((project, index) => (
+              <article key={index} className="project-card reveal">
+                <div style={{ color: 'var(--accent)', marginBottom: '1rem' }}>
+                  {project.icon}
+                </div>
+                <h3 className="project-title">{project.title}</h3>
+                <p className="project-desc">{project.desc}</p>
+                <div className="tag-list">
+                  {project.tags.map((tag) => (
+                    <span key={tag} className="tech-tag">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                {project.links.length > 0 && (
+                  <div className="project-links">
+                    {project.links.map((link) => (
+                      <a
+                        key={link.label}
+                        href={link.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="project-link"
+                      >
                         {link.label} →
                       </a>
                     ))}
                   </div>
-                </div>
+                )}
               </article>
             ))}
-            
-            <article className="glass-card col-8 reveal" style={{ justifyContent: 'center', background: 'linear-gradient(135deg, hsla(260, 80%, 65%, 0.05), transparent)' }}>
-               <h3 style={{ fontSize: '1.75rem', marginBottom: '1rem' }}>Interessado no meu perfil?</h3>
-               <p style={{ color: 'var(--text-muted)' }}>Estou pronto para contribuir com novos desafios técnicos.</p>
-               <div style={{ marginTop: '2rem' }}>
-                  <button onClick={() => scrollTo('contato')} className="btn-aura btn-primary">Ver Disponibilidade</button>
-               </div>
+
+            <article
+              className="project-card reveal"
+              style={{
+                borderColor: 'var(--border-strong)',
+                background: 'var(--accent-soft)',
+                justifyContent: 'center',
+              }}
+            >
+              <h3 className="project-title">Currículo Técnico Completo</h3>
+              <p className="project-desc">
+                Acesse o documento detalhado com histórico acadêmico, stack completa, métricas de formação e links de projetos.
+              </p>
+              <div>
+                <a
+                  href="/Miguel_Stael_CV.pdf"
+                  download
+                  className="btn btn-accent"
+                  style={{ width: 'fit-content' }}
+                >
+                  Baixar Currículo (PDF)
+                </a>
+              </div>
             </article>
           </div>
         </Section>
 
-        <Section id="sobre" label="Trajetória" title="Sobre Mim">
-          <div className="bento-grid">
-            <div className="col-6 reveal">
-              <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginBottom: '1.5rem' }}>
-                Miguel Agostinho Stael Vianna, desenvolvedor Full Stack apaixonado por arquitetura e qualidade de software.
+        {/* ABOUT SECTION */}
+        <Section id="sobre" num="02" label="Trajetória" title="Sobre Mim">
+          <div className="about-grid">
+            <div className="about-bio reveal">
+              <p>
+                Sou Miguel Agostinho Stael Vianna, desenvolvedor Backend &amp; Full Stack com base técnica sólida em C# (.NET Core) e Java (Spring Boot), além de aplicações client-side com React, TypeScript e React Native.
               </p>
-              <p style={{ color: 'var(--text-dim)' }}>
-                Cursando ADS na Unicesumar, construo soluções sólidas utilizando Java, .NET e o ecossistema React. 
-                Meu foco é entregar código sustentável e valor técnico real.
+              <p>
+                Construo microsserviços e APIs RESTful aplicando princípios de Domain-Driven Design (DDD) e arquitetura em camadas. Tenho experiência com mensageria assíncrona orientada a eventos via RabbitMQ, além de persistência de alta performance com Dapper em bancos relacionais (SQL Server, PostgreSQL, MySQL).
+              </p>
+              <p>
+                Formado pela <strong>Residência Serratec (790h)</strong>, com média técnica final de <strong>95,5/100</strong> e pontuação máxima de <strong>100/100 em Inglês Técnico</strong>. Cursando Análise e Desenvolvimento de Sistemas na UniCesumar (3º período).
               </p>
             </div>
-            <div className="col-6 reveal glass-card">
-              <h3 style={{ marginBottom: '1.5rem' }}>Especialidades</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '2rem' }}>
-                <div>
-                  <h4 style={{ fontSize: '0.8rem', color: 'var(--accent-primary)', marginBottom: '1rem', textTransform: 'uppercase' }}>Backend</h4>
-                  <ul style={{ listStyle: 'none', color: 'var(--text-muted)', fontSize: '0.9rem', display: 'grid', gap: '0.5rem' }}>
-                    <li>Java / Spring Boot</li>
+
+            <div className="reveal">
+              <div className="tech-matrix">
+                <div className="tech-group">
+                  <h4>Backend &amp; Arquitetura</h4>
+                  <ul>
                     <li>C# / .NET Core</li>
-                    <li>Node.js / SQL</li>
-                    <li>Docker / RabbitMQ</li>
+                    <li>Java (17/21) / Spring Boot</li>
+                    <li>APIs RESTful &amp; Microsserviços</li>
+                    <li>Domain-Driven Design (DDD)</li>
+                    <li>Clean Architecture &amp; SOLID</li>
                   </ul>
+                </div>
+
+                <div className="tech-group">
+                  <h4>Persistência &amp; Mensageria</h4>
+                  <ul>
+                    <li>SQL Server, PostgreSQL, MySQL</li>
+                    <li>Dapper (consultas otimizadas)</li>
+                    <li>RabbitMQ (eventos assíncronos)</li>
+                    <li>Modelagem Relacional</li>
+                    <li>Migrations &amp; Indexação</li>
+                  </ul>
+                </div>
+
+                <div className="tech-group">
+                  <h4>Frontend &amp; Mobile</h4>
+                  <ul>
+                    <li>JavaScript (ES6+) &amp; TypeScript</li>
+                    <li>React &amp; Next.js</li>
+                    <li>React Native (Mobile)</li>
+                    <li>Axios &amp; consumo de APIs</li>
+                    <li>HTML5 semântico &amp; CSS3 moderno</li>
+                  </ul>
+                </div>
+
+                <div className="tech-group">
+                  <h4>DevOps, Qualidade &amp; IA</h4>
+                  <ul>
+                    <li>Git, GitHub, Conventional Commits</li>
+                    <li>Docker &amp; Containers</li>
+                    <li>Swagger / OpenAPI &amp; Postman</li>
+                    <li>Clean Code &amp; Testes</li>
+                    <li>Prompt Engineering (Gemini / Claude)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Section>
+
+        {/* EDUCATION & CERTIFICATIONS SECTION */}
+        <Section id="certificados" num="03" label="Educação &amp; Credenciais" title="Formação e Certificações">
+          {/* Highlight Cards */}
+          <div className="reveal">
+            <div className="edu-card">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+                <div>
+                  <h3 className="edu-title">Residência em TIC/Software — Desenvolvedor Full Stack</h3>
+                  <p className="edu-subtitle">Serratec / Firjan SENAI — 790 horas (560h Formação Técnica + 230h Competências Complementares)</p>
+                </div>
+                <a
+                  href="/certificates/residencia-serratec-fullstack.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn btn-outline"
+                  style={{ fontSize: '0.8rem', padding: '6px 14px' }}
+                >
+                  Visualizar Certificado Oficial (PDF) ↗
+                </a>
+              </div>
+              <p className="edu-detail">
+                Formação intensiva em engenharia de software abrangendo C# (.NET Core), Java (Spring Boot), React, TypeScript, modelagem relacional, microsserviços, RabbitMQ e metodologias ágeis (Scrum/Kanban).
+              </p>
+              <span className="edu-badge">
+                ★ Desempenho de Destaque: média técnica 95,5/100 • pontuação máxima 100/100 em Inglês Técnico
+              </span>
+            </div>
+
+            <div className="edu-card">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+                <div>
+                  <h3 className="edu-title">Tecnólogo em Análise e Desenvolvimento de Sistemas</h3>
+                  <p className="edu-subtitle">UniCesumar — 3º período (2025 - Previsão de Conclusão: Dez/2027)</p>
+                </div>
+                <a
+                  href="/certificates/unicesumar-ads-carteirinha.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn btn-outline"
+                  style={{ fontSize: '0.8rem', padding: '6px 14px' }}
+                >
+                  Visualizar Registro Acadêmico (PDF) ↗
+                </a>
+              </div>
+              <p className="edu-detail">
+                Graduação superior com ênfase em arquitetura de software, estruturas de dados, algoritmos, modelagem de banco de dados, governança de TI e sistemas distribuídos.
+              </p>
+              <span className="edu-badge">
+                Cursando • Matrícula Ativa
+              </span>
+            </div>
+          </div>
+
+          {/* Languages Row */}
+          <div className="reveal" style={{ marginBottom: '2.5rem' }}>
+            <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '6px', padding: '1.25rem' }}>
+              <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1rem' }}>
+                Proficiência em Idiomas
+              </h4>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem', fontSize: '0.9rem' }}>
+                    <span style={{ fontWeight: 600 }}>Português</span>
+                    <span style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>Nativo</span>
+                  </div>
+                  <div style={{ height: '4px', background: 'var(--border)', borderRadius: '2px' }}>
+                    <div style={{ width: '100%', height: '100%', background: 'var(--accent)', borderRadius: '2px' }} />
+                  </div>
                 </div>
                 <div>
-                  <h4 style={{ fontSize: '0.8rem', color: 'var(--accent-secondary)', marginBottom: '1rem', textTransform: 'uppercase' }}>Frontend</h4>
-                  <ul style={{ listStyle: 'none', color: 'var(--text-muted)', fontSize: '0.9rem', display: 'grid', gap: '0.5rem' }}>
-                    <li>React / Next.js</li>
-                    <li>React Native</li>
-                    <li>TypeScript</li>
-                    <li>CSS / Tailwind</li>
-                  </ul>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem', fontSize: '0.9rem' }}>
+                    <span style={{ fontWeight: 600 }}>Inglês</span>
+                    <span style={{ color: 'var(--accent)', fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>Avançado / Fluente — 100/100</span>
+                  </div>
+                  <div style={{ height: '4px', background: 'var(--border)', borderRadius: '2px' }}>
+                    <div style={{ width: '100%', height: '100%', background: 'var(--accent)', borderRadius: '2px' }} />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </Section>
 
-        <Section id="certificados" label="Educação" title="Formação Acadêmica" className="reveal">
-          <div className="glass-card" style={{ maxWidth: '900px', margin: '0 auto', display: 'flex', gap: '2.5rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-            <img src={certificadoImg} alt="Certificado" style={{ width: '100%', maxWidth: '380px', borderRadius: '16px' }} />
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-              <div>
-                <h3 style={{ marginBottom: '0.5rem' }}>Tecnólogo em Análise e Desenvolvimento de Sistemas</h3>
-                <p style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>Unicesumar | 3º período (2025 - 2027)</p>
-                <span className="tag">Cursando</span>
-              </div>
-              <div>
-                <h3 style={{ marginBottom: '0.5rem' }}>Formação Full Stack (Residência Serratec)</h3>
-                <p style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>Serratec / Senai | 400 horas (2025)</p>
-                <span className="tag">Concluído</span>
-              </div>
+          {/* Certificate Filters */}
+          <div className="reveal">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.25rem', fontWeight: 600 }}>
+                Certificados ({filteredCertificates.length})
+              </h3>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-dim)' }}>
+                Todos os PDFs disponíveis para consulta direta
+              </span>
+            </div>
+
+            <div className="cert-filter-bar">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`cert-filter-chip ${activeCategory === cat ? 'is-active' : ''}`}
+                >
+                  {cat}
+                  {cat !== 'Todos' && (
+                    <span style={{ marginLeft: '6px', opacity: 0.7 }}>
+                      ({CERTIFICATES.filter((c) => c.category === cat).length})
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {/* Certificates Grid */}
+            <div className="certs-grid">
+              {filteredCertificates.map((cert) => (
+                <a
+                  key={cert.id}
+                  href={cert.pdfUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="cert-item"
+                  title={`Abrir certificado: ${cert.title}`}
+                >
+                  <div>
+                    <div className="cert-badge-row">
+                      <span className="cert-issuer">{cert.issuer}</span>
+                      <span className="cert-category-tag">{cert.category}</span>
+                      {cert.workload && (
+                        <span className="cert-category-tag" style={{ color: 'var(--accent)' }}>
+                          {cert.workload}
+                        </span>
+                      )}
+                    </div>
+                    <h4 className="cert-name">{cert.title}</h4>
+                    <p className="cert-desc">{cert.description}</p>
+                    {cert.highlight && (
+                      <p style={{ fontSize: '0.75rem', color: 'var(--accent)', fontFamily: 'var(--font-mono)', marginBottom: '0.75rem' }}>
+                        ★ {cert.highlight}
+                      </p>
+                    )}
+                  </div>
+                  <div className="cert-meta-row">
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-dim)' }}>
+                      PDF Oficial
+                    </span>
+                    <span className="cert-action">
+                      Visualizar PDF ↗
+                    </span>
+                  </div>
+                </a>
+              ))}
             </div>
           </div>
         </Section>
 
-        <section id="contato" className="section-padding reveal" style={{ textAlign: 'center' }}>
+        {/* CONTACT SECTION */}
+        <section id="contato" className="contact-section reveal">
           <div className="container">
-            <span className="section-label">Conectar</span>
-            <h2 className="section-title" style={{ marginBottom: '3rem' }}>Vamos conversar sobre o seu time?</h2>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-              <a href="https://wa.me/5522981362226" target="_blank" rel="noreferrer" className="btn-aura btn-primary">WhatsApp</a>
-              <a href="mailto:miguel.stael@gmail.com" className="btn-aura btn-outline">E-mail</a>
-              <a href="https://linkedin.com/in/miguel-stael" target="_blank" rel="noreferrer" className="btn-aura btn-outline">LinkedIn</a>
-              <a href="https://github.com/MiguelStael" target="_blank" rel="noreferrer" className="btn-aura btn-outline">GitHub</a>
+            <span
+              className="section-label"
+              style={{
+                display: 'block',
+                fontSize: '0.8rem',
+                color: 'var(--accent)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+                marginBottom: '0.5rem',
+                fontFamily: 'var(--font-mono)',
+              }}
+            >
+              Conectar
+            </span>
+            <h2 className="contact-title">Fale comigo</h2>
+            <p style={{ color: 'var(--text-muted)', maxWidth: '540px', margin: '0 auto 2.5rem', fontSize: '1rem' }}>
+              Disponível para oportunidades como desenvolvedor Backend e Full Stack, novos projetos e colaborações técnicas.
+            </p>
+
+            <div className="contact-links">
+              <a
+                href="https://wa.me/5522981362226"
+                target="_blank"
+                rel="noreferrer"
+                className="btn btn-accent"
+              >
+                WhatsApp: (22) 98136-2226
+              </a>
+              <a
+                href="mailto:miguel.stael@gmail.com"
+                className="btn btn-outline"
+              >
+                miguel.stael@gmail.com
+              </a>
+              <a
+                href="https://linkedin.com/in/miguel-stael"
+                target="_blank"
+                rel="noreferrer"
+                className="btn btn-outline"
+              >
+                LinkedIn
+              </a>
+              <a
+                href="https://github.com/MiguelStael"
+                target="_blank"
+                rel="noreferrer"
+                className="btn btn-outline"
+              >
+                GitHub
+              </a>
             </div>
-            <div style={{ marginTop: '5rem' }}>
-               <a href="./curriculo.pdf" download className="btn-aura btn-primary" style={{ background: 'var(--accent-secondary)', boxShadow: '0 0 20px hsla(170, 50%, 45%, 0.1)', padding: '16px 40px' }}>
-                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ marginRight: '8px' }}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                 Download Currículo Completo (PDF)
-               </a>
+
+            <div style={{ marginTop: '3.5rem' }}>
+              <a
+                href="/Miguel_Stael_CV.pdf"
+                download
+                className="btn btn-outline"
+                style={{ padding: '14px 28px', fontSize: '0.9rem', borderColor: 'var(--accent)', color: 'var(--accent)' }}
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  style={{ marginRight: '6px' }}
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Download Currículo Completo (PDF)
+              </a>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="container" style={{ padding: '4rem 0', textAlign: 'center', borderTop: '1px solid var(--border-glass)' }}>
-        <p style={{ color: 'var(--text-dim)', fontSize: '0.85rem' }}>© {new Date().getFullYear()} — Miguel Stael — Developer Portfolio</p>
+      <footer className="site-footer">
+        <div className="container">
+          <p>© {new Date().getFullYear()} Miguel Stael — Desenvolvedor Backend &amp; Full Stack</p>
+        </div>
       </footer>
 
       <AccessibilityMenu />
