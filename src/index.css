@@ -795,6 +795,31 @@ body.light-mode .header-nav.nav-scrolled {
   pointer-events: all;
 }
 
+@media (max-width: 600px) {
+  .accessibility-panel {
+    bottom: 4.5rem;
+    right: 0.75rem;
+    left: 0.75rem;
+    width: auto;
+    max-width: none;
+  }
+  .fab-accessibility {
+    bottom: 1.25rem;
+    right: 1.25rem;
+    width: 48px;
+    height: 48px;
+  }
+  .panel-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .acc-option {
+    padding: 10px 4px;
+  }
+  .option-label {
+    font-size: 0.6rem;
+  }
+}
+
 .panel-header {
   display: flex;
   justify-content: space-between;
@@ -880,6 +905,12 @@ body.light-mode .header-nav.nav-scrolled {
 }
 
 /* Accessibility Body Modifiers */
+body.invert-colors .accessibility-panel,
+body.invert-colors .fab-accessibility,
+body.invert-colors .reading-guide-line {
+  filter: invert(100%) hue-rotate(180deg);
+}
+
 body.high-contrast {
   --bg: #000000;
   --bg-surface: #0a0a0a;
