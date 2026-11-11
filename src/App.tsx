@@ -71,7 +71,7 @@ function App() {
               Contato
             </a>
             <a
-              href="/portifolio/Miguel_Stael_CV.pdf"
+              href="/portifolio/curriculo-miguel-stael.pdf"
               download
               className="btn btn-outline"
               style={{ padding: '6px 14px', fontSize: '0.8rem' }}
@@ -174,7 +174,7 @@ function App() {
               </p>
               <div>
                 <a
-                  href="/portifolio/Miguel_Stael_CV.pdf"
+                  href="/portifolio/curriculo-miguel-stael.pdf"
                   download
                   className="btn btn-accent"
                   style={{ width: 'fit-content' }}
@@ -420,7 +420,7 @@ function App() {
 
             <div style={{ marginTop: '3.5rem' }}>
               <a
-                href="/portifolio/Miguel_Stael_CV.pdf"
+                href="/portifolio/curriculo-miguel-stael.pdf"
                 download
                 className="btn btn-outline"
                 style={{ padding: '14px 28px', fontSize: '0.9rem', borderColor: 'var(--accent)', color: 'var(--accent)' }}
