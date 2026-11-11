@@ -61,14 +61,17 @@ function App() {
             <a href="#sobre" onClick={(e) => { e.preventDefault(); scrollTo('sobre'); }} className="nav-item">
               Sobre
             </a>
+            <a href="#formacao" onClick={(e) => { e.preventDefault(); scrollTo('formacao'); }} className="nav-item">
+              Formação
+            </a>
             <a href="#certificados" onClick={(e) => { e.preventDefault(); scrollTo('certificados'); }} className="nav-item">
-              Formação &amp; Certificados
+              Certificações
             </a>
             <a href="#contato" onClick={(e) => { e.preventDefault(); scrollTo('contato'); }} className="nav-item">
               Contato
             </a>
             <a
-              href="/Miguel_Stael_CV.pdf"
+              href="/portifolio/Miguel_Stael_CV.pdf"
               download
               className="btn btn-outline"
               style={{ padding: '6px 14px', fontSize: '0.8rem' }}
@@ -92,7 +95,7 @@ function App() {
                 Desenvolvedor <span>Backend &amp; Full Stack</span>
               </h1>
               <p className="hero-text">
-                Atuação em C# (.NET Core) e Java (Spring Boot), com experiência em microsserviços, mensageria com RabbitMQ, arquitetura DDD e persistência com Dapper em SQL Server, PostgreSQL e MySQL. No frontend e mobile, desenvolvo com React, TypeScript e React Native.
+                Atuando em C# (.NET Core) e Java (Spring Boot), com experiência em microsserviços, mensageria com RabbitMQ, arquitetura DDD e persistência com Dapper em SQL Server, PostgreSQL e MySQL. No frontend e mobile, uso React, TypeScript e React Native.
               </p>
               <div className="hero-meta">
                 <span>📍 Cordeiro - RJ</span>
@@ -146,7 +149,7 @@ function App() {
                         key={link.label}
                         href={link.url}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="project-link"
                       >
                         {link.label} →
@@ -171,7 +174,7 @@ function App() {
               </p>
               <div>
                 <a
-                  href="/Miguel_Stael_CV.pdf"
+                  href="/portifolio/Miguel_Stael_CV.pdf"
                   download
                   className="btn btn-accent"
                   style={{ width: 'fit-content' }}
@@ -188,59 +191,55 @@ function App() {
           <div className="about-grid">
             <div className="about-bio reveal">
               <p>
-                Sou Miguel Agostinho Stael Vianna, desenvolvedor Backend &amp; Full Stack com base técnica sólida em C# (.NET Core) e Java (Spring Boot), além de aplicações client-side com React, TypeScript e React Native.
+                Sou Miguel Agostinho Stael Vianna, desenvolvedor Backend &amp; Full Stack. Trabalho com C# (.NET Core) e Java (Spring Boot), e no lado do cliente uso React, TypeScript e React Native.
               </p>
               <p>
-                Construo microsserviços e APIs RESTful aplicando princípios de Domain-Driven Design (DDD) e arquitetura em camadas. Tenho experiência com mensageria assíncrona orientada a eventos via RabbitMQ, além de persistência de alta performance com Dapper em bancos relacionais (SQL Server, PostgreSQL, MySQL).
+                Construo microsserviços e APIs RESTful com princípios de Domain-Driven Design (DDD) e arquitetura em camadas. Tenho experiência com mensageria assíncrona via RabbitMQ e persistência com Dapper em SQL Server, PostgreSQL e MySQL.
               </p>
               <p>
-                Formado pela <strong>Residência Serratec (790h)</strong>, com média técnica final de <strong>95,5/100</strong> e pontuação máxima de <strong>100/100 em Inglês Técnico</strong>. Cursando Análise e Desenvolvimento de Sistemas na UniCesumar (3º período).
+                Formado pela <strong>Residência Serratec (790h)</strong>, com média técnica final de <strong>95,5/100</strong>. Cursando Análise e Desenvolvimento de Sistemas na UniCesumar (3º período).
+              </p>
+              <p>
+                Trabalho com <strong>Clean Code</strong> e <strong>organização</strong> de projetos, e tenho domínio do <strong>GitHub</strong> em fluxos avançados — branches, revisões, pipelines e versionamento.
               </p>
             </div>
 
             <div className="reveal">
               <div className="tech-matrix">
                 <div className="tech-group">
-                  <h4>Backend &amp; Arquitetura</h4>
+                  <h4>Front-End</h4>
                   <ul>
-                    <li>C# / .NET Core</li>
-                    <li>Java (17/21) / Spring Boot</li>
-                    <li>APIs RESTful &amp; Microsserviços</li>
-                    <li>Domain-Driven Design (DDD)</li>
-                    <li>Clean Architecture &amp; SOLID</li>
+                    <li>HTML, CSS, JavaScript</li>
+                    <li>React.js</li>
+                    <li>Interfaces modernas e interativas</li>
                   </ul>
                 </div>
 
                 <div className="tech-group">
-                  <h4>Persistência &amp; Mensageria</h4>
+                  <h4>Back-End</h4>
                   <ul>
-                    <li>SQL Server, PostgreSQL, MySQL</li>
-                    <li>Dapper (consultas otimizadas)</li>
-                    <li>RabbitMQ (eventos assíncronos)</li>
-                    <li>Modelagem Relacional</li>
-                    <li>Migrations &amp; Indexação</li>
+                    <li>Node.js</li>
+                    <li>Java (Spring Boot)</li>
+                    <li>Python &amp; PHP</li>
                   </ul>
                 </div>
 
                 <div className="tech-group">
-                  <h4>Frontend &amp; Mobile</h4>
+                  <h4>Database</h4>
                   <ul>
-                    <li>JavaScript (ES6+) &amp; TypeScript</li>
-                    <li>React &amp; Next.js</li>
-                    <li>React Native (Mobile)</li>
-                    <li>Axios &amp; consumo de APIs</li>
-                    <li>HTML5 semântico &amp; CSS3 moderno</li>
+                    <li>MySQL &amp; PostgreSQL</li>
+                    <li>MongoDB</li>
+                    <li>Modelagem e consulta</li>
                   </ul>
                 </div>
 
                 <div className="tech-group">
-                  <h4>DevOps, Qualidade &amp; IA</h4>
+                  <h4>Cloud, DevOps &amp; Métodos</h4>
                   <ul>
-                    <li>Git, GitHub, Conventional Commits</li>
-                    <li>Docker &amp; Containers</li>
-                    <li>Swagger / OpenAPI &amp; Postman</li>
-                    <li>Clean Code &amp; Testes</li>
-                    <li>Prompt Engineering (Gemini / Claude)</li>
+                    <li>AWS, Azure, Google Cloud</li>
+                    <li>Docker &amp; Kubernetes</li>
+                    <li>GitHub avançado &amp; Versionamento</li>
+                    <li>Clean Code &amp; Organização</li>
                   </ul>
                 </div>
               </div>
@@ -248,9 +247,8 @@ function App() {
           </div>
         </Section>
 
-        {/* EDUCATION & CERTIFICATIONS SECTION */}
-        <Section id="certificados" num="03" label="Educação &amp; Credenciais" title="Formação e Certificações">
-          {/* Highlight Cards */}
+        {/* FORMATION SECTION */}
+        <Section id="formacao" num="03" label="Educação" title="Formação">
           <div className="reveal">
             <div className="edu-card">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
@@ -259,9 +257,9 @@ function App() {
                   <p className="edu-subtitle">Serratec / Firjan SENAI — 790 horas (560h Formação Técnica + 230h Competências Complementares)</p>
                 </div>
                 <a
-                  href="/certificates/residencia-serratec-fullstack.pdf"
+                  href="/portifolio/certificates/residencia-serratec-fullstack.pdf"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="btn btn-outline"
                   style={{ fontSize: '0.8rem', padding: '6px 14px' }}
                 >
@@ -269,10 +267,10 @@ function App() {
                 </a>
               </div>
               <p className="edu-detail">
-                Formação intensiva em engenharia de software abrangendo C# (.NET Core), Java (Spring Boot), React, TypeScript, modelagem relacional, microsserviços, RabbitMQ e metodologias ágeis (Scrum/Kanban).
+                Formação em engenharia de software com C# (.NET Core), Java (Spring Boot), React, TypeScript, modelagem relacional, microsserviços, RabbitMQ e metodologias ágeis (Scrum/Kanban).
               </p>
               <span className="edu-badge">
-                ★ Desempenho de Destaque: média técnica 95,5/100 • pontuação máxima 100/100 em Inglês Técnico
+                ★ Desempenho de Destaque: média técnica 95,5/100
               </span>
             </div>
 
@@ -280,17 +278,8 @@ function App() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
                 <div>
                   <h3 className="edu-title">Tecnólogo em Análise e Desenvolvimento de Sistemas</h3>
-                  <p className="edu-subtitle">UniCesumar — 3º período (2025 - Previsão de Conclusão: Dez/2027)</p>
+                  <p className="edu-subtitle">UniCesumar — 3º período • Cursando ativamente</p>
                 </div>
-                <a
-                  href="/certificates/unicesumar-ads-carteirinha.pdf"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn btn-outline"
-                  style={{ fontSize: '0.8rem', padding: '6px 14px' }}
-                >
-                  Visualizar Registro Acadêmico (PDF) ↗
-                </a>
               </div>
               <p className="edu-detail">
                 Graduação superior com ênfase em arquitetura de software, estruturas de dados, algoritmos, modelagem de banco de dados, governança de TI e sistemas distribuídos.
@@ -300,37 +289,10 @@ function App() {
               </span>
             </div>
           </div>
+        </Section>
 
-          {/* Languages Row */}
-          <div className="reveal" style={{ marginBottom: '2.5rem' }}>
-            <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: '6px', padding: '1.25rem' }}>
-              <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1rem' }}>
-                Proficiência em Idiomas
-              </h4>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem', fontSize: '0.9rem' }}>
-                    <span style={{ fontWeight: 600 }}>Português</span>
-                    <span style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>Nativo</span>
-                  </div>
-                  <div style={{ height: '4px', background: 'var(--border)', borderRadius: '2px' }}>
-                    <div style={{ width: '100%', height: '100%', background: 'var(--accent)', borderRadius: '2px' }} />
-                  </div>
-                </div>
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem', fontSize: '0.9rem' }}>
-                    <span style={{ fontWeight: 600 }}>Inglês</span>
-                    <span style={{ color: 'var(--accent)', fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>Avançado / Fluente — 100/100</span>
-                  </div>
-                  <div style={{ height: '4px', background: 'var(--border)', borderRadius: '2px' }}>
-                    <div style={{ width: '100%', height: '100%', background: 'var(--accent)', borderRadius: '2px' }} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Certificate Filters */}
+        {/* CERTIFICATIONS SECTION */}
+        <Section id="certificados" num="04" label="Credenciais" title="Certificações">
           <div className="reveal">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
               <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.25rem', fontWeight: 600 }}>
@@ -365,7 +327,7 @@ function App() {
                   key={cert.id}
                   href={cert.pdfUrl}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="cert-item"
                   title={`Abrir certificado: ${cert.title}`}
                 >
@@ -427,7 +389,7 @@ function App() {
               <a
                 href="https://wa.me/5522981362226"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="btn btn-accent"
               >
                 WhatsApp: (22) 98136-2226
@@ -441,7 +403,7 @@ function App() {
               <a
                 href="https://linkedin.com/in/miguel-stael"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="btn btn-outline"
               >
                 LinkedIn
@@ -449,7 +411,7 @@ function App() {
               <a
                 href="https://github.com/MiguelStael"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="btn btn-outline"
               >
                 GitHub
@@ -458,7 +420,7 @@ function App() {
 
             <div style={{ marginTop: '3.5rem' }}>
               <a
-                href="/Miguel_Stael_CV.pdf"
+                href="/portifolio/Miguel_Stael_CV.pdf"
                 download
                 className="btn btn-outline"
                 style={{ padding: '14px 28px', fontSize: '0.9rem', borderColor: 'var(--accent)', color: 'var(--accent)' }}

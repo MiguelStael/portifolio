@@ -1,0 +1,114 @@
+{
+  "audit": {
+    "target": "D:\\Programação\\portifolio",
+    "date": "2026-11-11",
+    "mode": "single-run",
+    "skill": "security-audit (Cloudflare, README-driven)",
+    "status": "complete",
+    "verdicts": { "confirmed": 5, "needs_validation": 1, "rejected": 0 }
+  },
+  "units": [
+    {
+      "id": "U-01",
+      "area": "Dependency supply chain",
+      "checks": [
+        {
+          "id": "C-01",
+          "tool": "npm audit",
+          "status": "ran",
+          "result": "20 vulnerabilities (1 low, 9 moderate, 10 high) at start",
+          "evidence": "npm audit output: vite 8.0.0 (6 advisories), zod 4.3.6 (GHSA-mrhx-c7xc-m3w5), launch-editor (4 advisories)",
+          "resolution": "fixed",
+          "after": "7 moderate (dev-only @typescript-eslint transitive)"
+        }
+      ]
+    },
+    {
+      "id": "U-02",
+      "area": "Client-side storage (localStorage)",
+      "checks": [
+        {
+          "id": "C-02",
+          "tool": "manual review",
+          "status": "ran",
+          "result": "JSON.parse on localStorage without validation",
+          "evidence": "src/components/AccessibilityMenu.tsx:21",
+          "resolution": "fixed",
+          "after": "try/catch + per-field typeof guards + removeItem on corrupt data + storage writes wrapped in try/catch"
+        }
+      ]
+    },
+    {
+      "id": "U-03",
+      "area": "External link hardening",
+      "checks": [
+        {
+          "id": "C-03",
+          "tool": "manual review",
+          "status": "ran",
+          "result": "rel=\"noreferrer\" used without rel=\"noopener\" on 6 anchors",
+          "evidence": "src/App.tsx lines 152, 266, 334, 396, 410, 418",
+          "resolution": "fixed",
+          "after": "all target=_blank anchors use rel=\"noopener noreferrer\""
+        }
+      ]
+    },
+    {
+      "id": "U-04",
+      "area": "PDF / static asset serving",
+      "checks": [
+        {
+          "id": "C-04",
+          "tool": "manual review",
+          "status": "ran",
+          "result": "PDFs served from /portifolio/certificates/*.pdf with no rendering into DOM",
+          "evidence": "src/App.tsx cert.pdfUrl, src/data/certificates.ts, dist/certificates/ verified present"
+        }
+      ]
+    },
+    {
+      "id": "U-05",
+      "area": "Build / deploy configuration",
+      "checks": [
+        {
+          "id": "C-05",
+          "tool": "manual review",
+          "status": "ran",
+          "result": "vite.config.ts base: '/portifolio/', dist output verified",
+          "evidence": "vite.config.ts, npm run build output (vite 8.3.8)"
+        }
+      ]
+    },
+    {
+      "id": "U-06",
+      "area": "DOM injection / XSS surfaces",
+      "checks": [
+        {
+          "id": "C-06",
+          "tool": "manual review",
+          "status": "ran",
+          "result": "No dangerouslySetInnerHTML, no user input rendered, no template literals from events",
+          "evidence": "grep for dangerouslySetInnerHTML across src/"
+        }
+      ]
+    },
+    {
+      "id": "U-07",
+      "area": "Authentication / authorization",
+      "checks": [
+        {
+          "id": "C-07",
+          "tool": "manual review",
+          "status": "ran",
+          "result": "No auth mechanism present; site is fully public by design",
+          "evidence": "grep for auth/token/cookie/session across src/"
+        }
+      ]
+    }
+  ],
+  "coverage_gaps": [
+    "No runtime sandbox available - Vite dev server vulnerabilities (F-001) could not be reproduced in a controlled environment; mitigated by upgrading instead",
+    "No browser automation (Playwright/Puppeteer) available to test client-side behavior at runtime",
+    "Remaining 7 moderate @typescript-eslint vulns require npm audit fix --force (breaking); not resolved in this run"
+  ]
+}

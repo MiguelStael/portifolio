@@ -14,22 +14,35 @@ const AccessibilityMenu = () => {
   const [guidePosition, setGuidePosition] = useState(0);
 
   useEffect(() => {
-    const saved = localStorage.getItem('accessibility_settings');
-    const savedTheme = localStorage.getItem('theme');
+    try {
+      const saved = localStorage.getItem('accessibility_settings');
+      const savedTheme = localStorage.getItem('theme');
 
-    if (saved) {
-      const settings = JSON.parse(saved);
-      setFontSize(settings.fontSize || 1);
-      setHighContrast(settings.highContrast || false);
-      setGrayscale(settings.grayscale || false);
-      setInvertColors(settings.invertColors || false);
-      setHighlightLinks(settings.highlightLinks || false);
-      setHighlightTitles(settings.highlightTitles || false);
-      setDyslexiaFont(settings.dyslexiaFont || false);
-    }
+      if (saved) {
+        const settings = JSON.parse(saved);
+        if (typeof settings === 'object' && settings !== null) {
+          if (typeof settings.fontSize === 'number' && settings.fontSize >= 0.8 && settings.fontSize <= 2) {
+            setFontSize(settings.fontSize);
+          }
+          if (typeof settings.highContrast === 'boolean') setHighContrast(settings.highContrast);
+          if (typeof settings.grayscale === 'boolean') setGrayscale(settings.grayscale);
+          if (typeof settings.invertColors === 'boolean') setInvertColors(settings.invertColors);
+          if (typeof settings.highlightLinks === 'boolean') setHighlightLinks(settings.highlightLinks);
+          if (typeof settings.highlightTitles === 'boolean') setHighlightTitles(settings.highlightTitles);
+          if (typeof settings.dyslexiaFont === 'boolean') setDyslexiaFont(settings.dyslexiaFont);
+        }
+      }
 
-    if (savedTheme === 'light') {
-      setLightMode(true);
+      if (savedTheme === 'light') {
+        setLightMode(true);
+      }
+    } catch {
+      // Clear corrupt settings gracefully
+      try {
+        localStorage.removeItem('accessibility_settings');
+      } catch {
+        // Ignore storage write errors (e.g. private browsing quota)
+      }
     }
   }, []);
 
@@ -43,7 +56,12 @@ const AccessibilityMenu = () => {
       highlightTitles,
       dyslexiaFont,
     };
-    localStorage.setItem('accessibility_settings', JSON.stringify(settings));
+    try {
+      localStorage.setItem('accessibility_settings', JSON.stringify(settings));
+      localStorage.setItem('theme', lightMode ? 'light' : 'dark');
+    } catch {
+      // Ignore write errors on private mode / blocked cookies
+    }
 
     document.body.classList.toggle('high-contrast', highContrast);
     document.body.classList.toggle('grayscale-mode', grayscale);
@@ -53,8 +71,6 @@ const AccessibilityMenu = () => {
     document.body.classList.toggle('dyslexia-font', dyslexiaFont);
     document.body.classList.toggle('light-mode', lightMode);
     document.documentElement.style.fontSize = `${fontSize * 18}px`;
-
-    localStorage.setItem('theme', lightMode ? 'light' : 'dark');
   }, [fontSize, highContrast, grayscale, invertColors, highlightLinks, highlightTitles, dyslexiaFont, lightMode]);
 
   useEffect(() => {

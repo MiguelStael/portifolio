@@ -1,0 +1,86 @@
+{
+  "audit": {
+    "target": "D:\\Programação\\portifolio",
+    "date": "2026-11-11",
+    "mode": "single-run",
+    "verdicts": {
+      "confirmed": 5,
+      "needs_validation": 1,
+      "rejected": 0
+    }
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "verdict": "confirmed",
+      "severity": "high",
+      "title": "Vite dev server path traversal / arbitrary file read (GHSA-4w7w-66w2-5vf9, GHSA-v2wj-q39q-566r, GHSA-p9ff-h696-f583, GHSA-9jrq-w75r-8gcw, GHSA-rq7h-c2jc-7f22, GHSA-fx2h-pf6j-xcff)",
+      "area": "Dependency supply chain",
+      "source": "npm audit (vite 8.0.0)",
+      "impact": "Local dev server can be abused to read files outside the project root, bypass fs.deny, or execute scripts via custom middleware. Production build (dist/) is not affected.",
+      "status": "fixed",
+      "replacement": "vite@8.3.8 (npm install vite@latest)"
+    },
+    {
+      "id": "F-002",
+      "verdict": "confirmed",
+      "severity": "high",
+      "title": "Zod memory exhaustion on oversized constrained collections (GHSA-mrhx-c7xc-m3w5)",
+      "area": "Dependency supply chain",
+      "source": "npm audit (zod 4.3.6)",
+      "impact": "Malformed/oversized input can exhaust memory. zod is not imported anywhere in src/ (grep returned no hits), so direct impact is nil, but it is a transitive dep and should stay patched.",
+      "status": "fixed",
+      "replacement": "zod@4.13.0 (npm install zod@latest)"
+    },
+    {
+      "id": "F-003",
+      "verdict": "confirmed",
+      "severity": "moderate",
+      "title": "launch-editor arbitrary command execution / NTLMv2 hash disclosure (GHSA-v6wh-96g9-6wx3, GHSA-698v-4r3x-3vcv, GHSA-r825-w8mm-5pxw, GHSA-587h-7wmj-h5pm)",
+      "area": "Dependency supply chain",
+      "source": "npm audit (launch-editor)",
+      "impact": "Dev-only. Affects the `vite` editor integration. Not reachable from the production build.",
+      "status": "fixed",
+      "replacement": "pulled in by npm audit fix (transitive)"
+    },
+    {
+      "id": "F-004",
+      "verdict": "confirmed",
+      "severity": "low",
+      "title": "JSON.parse on localStorage without validation or error handling",
+      "area": "Client-side storage",
+      "source": "src/components/AccessibilityMenu.tsx:21",
+      "impact": "A corrupt or malicious value in `accessibility_settings` (same-origin, so only JS running on the page can write it) would throw an uncaught exception on load, breaking the page. No DOM injection risk because only typed primitives are read.",
+      "status": "fixed",
+      "replacement": "try/catch around parse + typeof/boolean guards on every field + removeItem on corrupt data"
+    },
+    {
+      "id": "F-005",
+      "verdict": "confirmed",
+      "severity": "low",
+      "title": "External links use rel=\"noreferrer\" without rel=\"noopener\"",
+      "area": "External link hardening",
+      "source": "src/App.tsx (6 occurrences)",
+      "impact": "Without `noopener`, the opened page can access `window.opener` and navigate the parent tab. All 6 fixed.",
+      "status": "fixed",
+      "replacement": "rel=\"noopener noreferrer\" on every target=_blank anchor"
+    },
+    {
+      "id": "F-006",
+      "verdict": "needs_validation",
+      "severity": null,
+      "title": "Remaining 7 moderate vulnerabilities in @typescript-eslint (transitive dev dependency)",
+      "area": "Dependency supply chain",
+      "source": "npm audit after fixes",
+      "impact": "Dev-only (eslint). Not shipped to production. Requires `npm audit fix --force` (breaking) or manual version pinning to clear.",
+      "status": "open",
+      "evidence": "npm audit: @typescript-eslint/parser 6.16.0-8.72.2, typescript-eslint <=8.72.2"
+    }
+  ],
+  "notes": [
+    "Site is a static SPA: no server, no auth, no user input, no forms, no cookies. Attack surface is limited to client-side storage and external links.",
+    "No XSS surface found: no dangerouslySetInnerHTML, no user-controlled values rendered into the DOM.",
+    "PDFs are served as static downloads; no content is parsed or rendered.",
+    "Vite dev server findings (F-001) apply only to local `npm run dev`, not the production build."
+  ]
+}

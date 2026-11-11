@@ -60,7 +60,7 @@ export const PROJECTS: Project[] = [
   },
   {
     title: 'App com React Native',
-    desc: 'Aplicativo mobile em React Native e TypeScript, com integração de dados e boa experiência de uso.',
+    desc: 'Aplicativo mobile em React Native e TypeScript para navegação e consumo de API.',
     tags: ['React Native', 'TypeScript'],
     links: [{ label: 'GitHub', url: 'https://github.com/MiguelStael/TrabalhoIndividual-ReactNative' }],
     col: 'col-4',
